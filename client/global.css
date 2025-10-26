@@ -1,0 +1,212 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Brand Colors */
+    --brand-orange: 25 100% 55%;
+    --brand-orange-light: 25 100% 65%;
+    --brand-orange-dark: 25 100% 45%;
+    --brand-navy: 220 100% 20%;
+    --brand-navy-light: 220 100% 30%;
+    --brand-navy-dark: 220 100% 10%;
+  }
+
+  .dark {
+    --background: 220 100% 8%;
+    --foreground: 0 0% 100%;
+
+    --card: 220 100% 10%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 220 100% 10%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 25 100% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 100% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 100% 15%;
+    --muted-foreground: 220 20% 70%;
+
+    --accent: 25 100% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 100% 20%;
+    --input: 220 100% 15%;
+    --ring: 25 100% 55%;
+    --sidebar-background: 220 100% 8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 25 100% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 100% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 100% 20%;
+    --sidebar-ring: 25 100% 55%;
+
+    /* Brand Colors - Enhanced for dark mode */
+    --brand-orange: 25 100% 60%;
+    --brand-orange-light: 25 100% 70%;
+    --brand-orange-dark: 25 100% 50%;
+    --brand-navy: 220 100% 8%;
+    --brand-navy-light: 220 100% 15%;
+    --brand-navy-dark: 220 100% 5%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+
+  /* Dark mode enhancements */
+  .dark body {
+    @apply bg-brand-navy text-white;
+  }
+
+  /* Responsive utilities */
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button, a, [role="button"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Enhanced hover effects for dark mode */
+  .dark .hover\:bg-brand-orange:hover {
+    @apply bg-brand-orange text-white;
+  }
+
+  .dark .hover\:text-brand-orange:hover {
+    @apply text-brand-orange;
+  }
+
+  /* Card shadows for dark mode */
+  .dark .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+
+  .dark .shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Responsive text sizing */
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl;
+  }
+
+  .text-responsive-3xl {
+    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl;
+  }
+
+  .text-responsive-4xl {
+    @apply text-3xl sm:text-4xl lg:text-5xl xl:text-6xl;
+  }
+
+  /* Responsive spacing */
+  .py-responsive {
+    @apply py-12 sm:py-16 lg:py-20 xl:py-24;
+  }
+
+  .px-responsive {
+    @apply px-4 sm:px-6 lg:px-8 xl:px-12;
+  }
+
+  /* Responsive grid gaps */
+  .gap-responsive {
+    @apply gap-4 sm:gap-6 lg:gap-8 xl:gap-10;
+  }
+
+  /* Mobile-first responsive design */
+  @media (max-width: 640px) {
+    .mobile-hidden {
+      @apply hidden;
+    }
+    
+    .mobile-full {
+      @apply w-full;
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .tablet-hidden {
+      @apply hidden;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .desktop-hidden {
+      @apply hidden;
+    }
+  }
+}
