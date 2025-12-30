@@ -1,0 +1,312 @@
+/* Custom Bootstrap theme overrides */
+:root {
+  --bs-primary: #fb923d;
+  --bs-secondary: #1e3a8a;
+  --bs-success: #10b981;
+  --bs-info: #3b82f6;
+  --bs-warning: #f59e0b;
+  --bs-danger: #ef4444;
+  --bs-light: #f9fafb;
+  --bs-dark: #1e293b;
+  
+  /* Brand colors */
+  --brand-orange: #fb923d;
+  --brand-orange-dark: #ea580c;
+  --brand-navy: #1e3a8a;
+  --brand-navy-light: #1e40af;
+  --brand-navy-dark: #1e293b;
+}
+
+.bg-brand-orange {
+  background-color: var(--brand-orange) !important;
+}
+
+.bg-brand-orange-dark {
+  background-color: var(--brand-orange-dark) !important;
+}
+
+.bg-brand-navy {
+  background-color: var(--brand-navy) !important;
+}
+
+.bg-brand-navy-light {
+  background-color: var(--brand-navy-light) !important;
+}
+
+.bg-brand-navy-dark {
+  background-color: var(--brand-navy-dark) !important;
+}
+
+.text-brand-orange {
+  color: var(--brand-orange) !important;
+}
+
+.text-brand-orange-dark {
+  color: var(--brand-orange-dark) !important;
+}
+
+.text-brand-navy {
+  color: var(--brand-navy) !important;
+}
+
+/* Dark mode support */
+.dark .bg-brand-navy {
+  background-color: var(--brand-navy-dark) !important;
+}
+
+.dark .bg-brand-navy-light {
+  background-color: #334155 !important;
+}
+
+.dark .text-white {
+  color: #ffffff !important;
+}
+
+.dark .text-gray-300 {
+  color: #d1d5db !important;
+}
+
+.dark .border-gray-700 {
+  border-color: #374151 !important;
+}
+
+/* Smooth transitions */
+.transition-colors {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Custom utilities */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.space-x-reverse {
+  direction: rtl;
+}
+
+.space-x-reverse > * + * {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] .space-x-reverse > * + * {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Footer visibility improvements - Dark background always uses light text */
+footer.bg-brand-navy-dark,
+footer.bg-brand-navy,
+footer.bg-dark {
+  background-color: var(--brand-navy-dark) !important;
+}
+
+footer.bg-brand-navy-dark a,
+footer.bg-brand-navy-dark .text-white,
+footer.bg-brand-navy-dark h3,
+footer.bg-brand-navy-dark p {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+footer.bg-brand-navy-dark a {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+footer.bg-brand-navy-dark a:hover,
+footer.bg-brand-navy-dark a:focus {
+  color: #ffffff !important;
+  text-decoration: underline;
+  opacity: 1;
+}
+
+footer.bg-brand-navy-dark a:active {
+  color: var(--brand-orange) !important;
+}
+
+/* Footer with light background in light mode - use dark text */
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) {
+  background-color: #ffffff !important;
+}
+
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) a,
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) .text-white,
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) h3,
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) p {
+  color: var(--brand-navy) !important;
+}
+
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) a:hover,
+footer:not(.bg-brand-navy-dark):not(.bg-brand-navy):not(.bg-dark) a:focus {
+  color: var(--brand-orange) !important;
+  text-decoration: underline;
+}
+
+/* Footer link spacing in Bootstrap way */
+footer .space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+footer h3 {
+  font-weight: 600;
+  color: inherit;
+}
+
+/* Social media icons visibility */
+footer svg {
+  transition: all 0.2s ease;
+}
+
+footer a:hover svg,
+footer a:focus svg {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* Navbar/Header visibility improvements */
+/* Dark background navbar - use light text */
+nav.bg-brand-navy,
+nav.bg-brand-navy-light,
+nav.bg-brand-navy-dark,
+nav.bg-dark,
+header.bg-brand-navy,
+header.bg-brand-navy-light,
+header.bg-brand-navy-dark,
+header.bg-dark,
+.dark nav,
+.dark header {
+  background-color: var(--brand-navy-dark) !important;
+}
+
+nav.bg-brand-navy button,
+nav.bg-brand-navy-light button,
+nav.bg-brand-navy-dark button,
+header.bg-brand-navy button,
+header.bg-brand-navy-light button,
+header.bg-brand-navy-dark button,
+.dark nav button:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-info),
+.dark header button:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):not(.btn-info) {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+nav.bg-brand-navy button:hover,
+nav.bg-brand-navy-light button:hover,
+nav.bg-brand-navy-dark button:hover,
+header.bg-brand-navy button:hover,
+header.bg-brand-navy-light button:hover,
+header.bg-brand-navy-dark button:hover,
+.dark nav button:hover,
+.dark header button:hover {
+  color: var(--brand-orange) !important;
+}
+
+/* Light background navbar - use dark text */
+nav:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark):not(.dark),
+header:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark):not(.dark),
+nav.bg-white,
+header.bg-white,
+nav.bg-transparent[style*="white"],
+header.bg-transparent[style*="white"] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+nav:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark):not(.dark) button:not(.bg-brand-orange):not(.btn-primary):not(.btn-success),
+header:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark):not(.dark) button:not(.bg-brand-orange):not(.btn-primary):not(.btn-success),
+nav.bg-white button:not(.bg-brand-orange):not(.btn-primary):not(.btn-success),
+header.bg-white button:not(.bg-brand-orange):not(.btn-primary):not(.btn-success) {
+  color: var(--brand-navy) !important;
+}
+
+nav:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark):not(.dark) button:hover,
+header:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark):not(.dark) button:hover,
+nav.bg-white button:hover,
+header.bg-white button:hover {
+  color: var(--brand-orange) !important;
+}
+
+/* Navbar text visibility when scrolled */
+nav.bg-white button.text-white,
+header.bg-white button.text-white,
+nav:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark) button.text-white,
+header:not(.bg-brand-navy):not(.bg-brand-navy-light):not(.bg-brand-navy-dark):not(.bg-dark) button.text-white {
+  color: var(--brand-navy) !important;
+}
+
+/* Ensure buttons are visible in all themes */
+.btn {
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Link visibility improvements */
+a:not(.btn):not(footer a) {
+  transition: color 0.2s ease;
+}
+
+/* Dark mode links */
+.dark a:not(.btn):not(footer a):not(.text-white):not(.text-brand-orange):not(.bg-brand-orange) {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Light mode links */
+a:not(.btn):not(footer a):not(.text-white):not(.text-brand-orange):not(.bg-brand-orange) {
+  color: var(--brand-navy) !important;
+}
+
+/* Light mode links on light backgrounds should be darker */
+.bg-white a:not(.btn):not(.text-white):not(.bg-brand-orange),
+.bg-light a:not(.btn):not(.text-white):not(.bg-brand-orange) {
+  color: var(--brand-navy) !important;
+}
+
+/* Hover states */
+a:not(.btn):not(footer a):not(.text-white):not(.text-brand-orange):hover {
+  color: var(--brand-orange) !important;
+}
+
+/* Icon button visibility */
+button svg,
+.btn svg {
+  transition: all 0.2s ease;
+}
+
+/* Button text color based on background */
+/* Dark background buttons - light text */
+.bg-brand-navy button,
+.bg-brand-navy-light button,
+.bg-brand-navy-dark button,
+.bg-dark button,
+.dark .bg-brand-navy button,
+.dark .bg-brand-navy-light button,
+.dark .bg-brand-navy-dark button {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Light background buttons - dark text */
+.bg-white button:not(.bg-brand-orange):not(.btn-primary):not(.btn-success):not(.text-white),
+.bg-light button:not(.bg-brand-orange):not(.btn-primary):not(.btn-success):not(.text-white),
+button.bg-white:not(.bg-brand-orange):not(.btn-primary):not(.btn-success):not(.text-white) {
+  color: var(--brand-navy) !important;
+}
+
+/* Ensure text-white works correctly */
+.text-white {
+  color: #ffffff !important;
+}
+
+/* Light mode - override text-white on light backgrounds */
+.bg-white .text-white:not(.bg-brand-orange):not(.btn-primary),
+.bg-light .text-white:not(.bg-brand-orange):not(.btn-primary),
+:not(.dark) .bg-white .text-white:not(.bg-brand-orange):not(.btn-primary),
+:not(.dark) .bg-light .text-white:not(.bg-brand-orange):not(.btn-primary) {
+  color: var(--brand-navy) !important;
+}
+
+/* Ensure buttons with text-white on light backgrounds get dark text */
+.bg-white button.text-white:not(.bg-brand-orange):not(.btn-primary),
+.bg-light button.text-white:not(.bg-brand-orange):not(.btn-primary),
+button.bg-white.text-white:not(.bg-brand-orange):not(.btn-primary) {
+  color: var(--brand-navy) !important;
+}
+

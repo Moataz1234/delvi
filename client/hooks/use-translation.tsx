@@ -10,16 +10,20 @@ interface TranslationContextType {
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
 
 export function TranslationProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>('ar');
+  // Load locale from localStorage or default to 'ar'
+  const [locale, setLocale] = useState<Locale>(() => {
+    const savedLocale = localStorage.getItem('delvi-locale') as Locale | null;
+    return (savedLocale === 'ar' || savedLocale === 'en') ? savedLocale : 'ar';
+  });
   
-  // تحديث language attribute فقط (الاتجاه يبقى RTL دائماً)
+  // Save locale to localStorage whenever it changes
   useEffect(() => {
+    localStorage.setItem('delvi-locale', locale);
     document.documentElement.lang = locale;
-    console.log('Language changed to:', locale); // للاختبار
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
   }, [locale]);
   
   const handleSetLocale = useCallback((newLocale: Locale) => {
-    console.log('Setting locale to:', newLocale); // للاختبار
     setLocale(newLocale);
   }, []);
   

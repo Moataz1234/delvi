@@ -1,3 +1,5 @@
+// Bootstrap CSS is loaded via CDN in index.html
+import "./bootstrap-custom.css";
 import "./global.css";
 
 import { Toaster } from "@/components/ui/toaster";

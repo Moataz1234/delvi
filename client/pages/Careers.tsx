@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/use-translation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { 
-  Car, 
   ArrowLeft, 
   Briefcase,
   MapPin,
@@ -16,360 +17,471 @@ import {
   Heart,
   Coffee,
   Zap,
-  Award
+  Award,
+  Sun,
+  Moon
 } from "lucide-react";
+import { Container, Row, Col, Card } from "react-bootstrap";
 
 export default function Careers() {
+  const { t, locale } = useTranslation();
+  // Load dark mode from localStorage or default to false
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('delvi-theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return isDark;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('delvi-theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('delvi-theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  // Job listings - These could come from API/CMS in production
+  const jobs = [
+    {
+      title: "مطور تطبيقات موبايل - React Native",
+      department: "التقنية",
+      location: "الرياض",
+      type: "دوام كامل",
+      salary: "12,000 - 18,000 ريال",
+      icon: Code,
+      description: "نبحث عن مطور تطبيقات موبايل خبير لتطوير وصيانة تطبيقاتنا على iOS و Android.",
+      requirements: ["خبرة 3+ سنوات في React Native", "معرفة قوية بـ JavaScript/TypeScript", "خبرة في تطوير التطبيقات التجارية"]
+    },
+    {
+      title: "مختص تسويق رقمي",
+      department: "التسويق", 
+      location: "جدة",
+      type: "دوام كامل",
+      salary: "8,000 - 12,000 ريال",
+      icon: Megaphone,
+      description: "مطلوب مختص تسويق رقمي مبدع لإدارة حملاتنا الرقمية وزيادة قاعدة المستخدمين.",
+      requirements: ["خبرة في إدارة الحملات الرقمية", "معرفة بأدوات التحليل", "مهارات إبداعية في المحتوى"]
+    },
+    {
+      title: "مدير علاقات السائقين",
+      department: "العمليات",
+      location: "الدمام", 
+      type: "دوام كامل",
+      salary: "10,000 - 14,000 ريال",
+      icon: Users,
+      description: "مطلوب مدير لإدارة علاقات السائقين وضمان رضاهم وتطوير شبكة السائقين.",
+      requirements: ["خبرة في إدارة العلاقات", "مهارات تواصل ممتازة", "خلفية في قطاع النقل مفضلة"]
+    },
+    {
+      title: "محلل بيانات",
+      department: "التقنية",
+      location: "الرياض",
+      type: "دوام كامل", 
+      salary: "11,000 - 15,000 ريال",
+      icon: TrendingUp,
+      description: "نبحث عن محلل بيانات لاستخراج رؤى قيمة من بيانات المنصة وتحسين الأداء.",
+      requirements: ["خبرة في تحليل البيانات", "معرفة بـ Python/R", "خبرة في SQL والإحصاء"]
+    },
+    {
+      title: "مصمم واجهات المستخدم (UI/UX)",
+      department: "التصميم",
+      location: "الرياض",
+      type: "دوام كامل",
+      salary: "9,000 - 13,000 ريال", 
+      icon: Zap,
+      description: "مطلوب مصمم واجهات مبدع لتحسين تجربة المستخدم في تطبيقاتنا.",
+      requirements: ["خبرة في تصميم UI/UX", "إتقان أدوات التصميم", "فهم لتجربة المستخدم"]
+    },
+    {
+      title: "مسؤول خدمة العملاء",
+      department: "خدمة العملاء",
+      location: "جدة",
+      type: "دوام كامل",
+      salary: "6,000 - 9,000 ريال",
+      icon: Heart,
+      description: "انضم لفريق خدمة العملاء لتقديم دعم متميز لمستخدمينا.",
+      requirements: ["مهارات تواصل ممتازة", "صبر وقدرة على حل المشاكل", "خبرة في خدمة العملاء"]
+    }
+  ];
+
+  const whyWorkWithUs = [
+    {
+      icon: TrendingUp,
+      title: t.careers.why.growth.title,
+      desc: t.careers.why.growth.desc,
+      bgColor: "bg-brand-orange",
+    },
+    {
+      icon: Heart,
+      title: t.careers.why.environment.title,
+      desc: t.careers.why.environment.desc,
+      bgColor: "bg-brand-navy",
+    },
+    {
+      icon: DollarSign,
+      title: t.careers.why.salary.title,
+      desc: t.careers.why.salary.desc,
+      bgColor: "bg-success",
+    },
+    {
+      icon: Coffee,
+      title: t.careers.why.flexibility.title,
+      desc: t.careers.why.flexibility.desc,
+      bgColor: "bg-info",
+    },
+  ];
+
+  const benefits = [
+    {
+      icon: Heart,
+      title: t.careers.benefits.healthInsurance.title,
+      desc: t.careers.benefits.healthInsurance.desc,
+      bgColor: "bg-brand-orange",
+    },
+    {
+      icon: Award,
+      title: t.careers.benefits.annualBonus.title,
+      desc: t.careers.benefits.annualBonus.desc,
+      bgColor: "bg-brand-navy",
+    },
+    {
+      icon: Coffee,
+      title: t.careers.benefits.flexibleLeave.title,
+      desc: t.careers.benefits.flexibleLeave.desc,
+      bgColor: "bg-success",
+    },
+    {
+      icon: TrendingUp,
+      title: t.careers.benefits.development.title,
+      desc: t.careers.benefits.development.desc,
+      bgColor: "bg-info",
+    },
+    {
+      icon: Zap,
+      title: t.careers.benefits.tools.title,
+      desc: t.careers.benefits.tools.desc,
+      bgColor: "bg-warning",
+    },
+    {
+      icon: Users,
+      title: t.careers.benefits.teamEvents.title,
+      desc: t.careers.benefits.teamEvents.desc,
+      bgColor: "bg-danger",
+    },
+  ];
+
+  const processSteps = [
+    {
+      step: 1,
+      title: t.careers.process.step1.title,
+      desc: t.careers.process.step1.desc,
+    },
+    {
+      step: 2,
+      title: t.careers.process.step2.title,
+      desc: t.careers.process.step2.desc,
+    },
+    {
+      step: 3,
+      title: t.careers.process.step3.title,
+      desc: t.careers.process.step3.desc,
+    },
+    {
+      step: 4,
+      title: t.careers.process.step4.title,
+      desc: t.careers.process.step4.desc,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen transition-colors ${isDarkMode ? 'bg-brand-navy' : 'bg-light'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="border-b bg-white">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link to="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  العودة للرئيسية
+      <header className={`sticky-top border-bottom transition-colors ${isDarkMode ? 'bg-brand-navy-light border-secondary' : 'bg-white border-light'}`} style={{zIndex: 1050}}>
+        <Container fluid className="px-3 px-md-4">
+          <Row className="align-items-center">
+            <Col className="d-flex align-items-center gap-3">
+              <Link to="/" className="text-decoration-none">
+                <Button variant="ghost" size="sm" className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}>
+                  <ArrowLeft className="me-2" style={{width: '16px', height: '16px'}} />
+                  {t.common.backToHome}
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2">
+              <div className="d-flex align-items-center">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                   alt="DELVI Logo"
-                  className="h-10 w-auto"
+                  style={{height: '40px', width: 'auto'}}
                 />
               </div>
-            </div>
-          </div>
-        </div>
+            </Col>
+            
+            <Col xs="auto" className="d-flex align-items-center gap-2">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleDarkMode}
+                className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}
+                title={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+                aria-label={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+              >
+                {isDarkMode ? <Sun style={{width: '16px', height: '16px'}} /> : <Moon style={{width: '16px', height: '16px'}} />}
+              </Button>
+            </Col>
+          </Row>
+        </Container>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-navy to-brand-navy-dark text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="bg-brand-orange text-white border-0 mb-6">
-              <Briefcase className="w-4 h-4 mr-2" />
-              الوظائف والتقديم
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              انضم إلى <span className="text-brand-orange">فريقنا</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-              ابدأ مسيرتك المهنية مع الشركة الرائدة في مجال المواصلات الذكية
-            </p>
-          </div>
-        </div>
+      <section className="bg-brand-navy text-white py-5 py-md-4" style={{background: 'linear-gradient(to bottom right, #1e3a8a, #1e293b)'}}>
+        <Container>
+          <Row className="justify-content-center">
+            <Col lg={10} className="text-center">
+              <Badge className="bg-brand-orange text-white border-0 mb-4 px-3 py-2 d-inline-flex align-items-center">
+                <Briefcase className="me-2" style={{width: '16px', height: '16px'}} />
+                {t.careers.hero.badge}
+              </Badge>
+              <h1 className="display-4 fw-bold mb-4">
+                {t.careers.hero.title} <span className="text-brand-orange">{t.careers.hero.titleHighlight}</span>
+              </h1>
+              <p className="lead text-light">
+                {t.careers.hero.subtitle}
+              </p>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* Why Work With Us */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">لماذا تعمل معنا؟</h2>
-            <p className="text-xl text-gray-600">مميزات العمل في DELVI</p>
+      <section className="py-5 py-md-4">
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.careers.why.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.careers.why.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="border-0 shadow-lg text-center">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 bg-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-brand-navy mb-2">نمو مهني</h3>
-                <p className="text-gray-600 text-sm">فرص تطوير مستمرة وتدريب متقدم</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg text-center">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 bg-brand-navy rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-brand-navy mb-2">بيئة مميزة</h3>
-                <p className="text-gray-600 text-sm">فريق عمل متعاون وثقافة شركة إيجابية</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg text-center">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-brand-navy mb-2">راتب تنافسي</h3>
-                <p className="text-gray-600 text-sm">رواتب ومكافآت تنافسية في السوق</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg text-center">
-              <CardContent className="p-6">
-                <div className="w-16 h-16 bg-purple-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <Coffee className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-brand-navy mb-2">مرونة في العمل</h3>
-                <p className="text-gray-600 text-sm">ساعات عمل مرنة وإمكانية العمل عن بُعد</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5">
+            {whyWorkWithUs.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <Col sm={6} lg={3} key={index}>
+                  <Card className={`h-100 border-0 shadow text-center transition-all ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+                    <Card.Body className="p-4">
+                      <div className={`${item.bgColor} rounded d-flex align-items-center justify-content-center mx-auto mb-3`} style={{width: '64px', height: '64px'}}>
+                        <IconComponent className="text-white" style={{width: '32px', height: '32px'}} />
+                      </div>
+                      <h3 className="h5 fw-semibold mb-2 text-primary">
+                        {item.title}
+                      </h3>
+                      <p className="small text-muted">
+                        {item.desc}
+                      </p>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </section>
 
       {/* Open Positions */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">الوظائف المتاحة</h2>
-            <p className="text-xl text-gray-600">انضم لفريقنا في هذه المناصب المثيرة</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.careers.positions.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.careers.positions.subtitle}
+            </p>
           </div>
 
-          <div className="space-y-6">
-            {[
-              {
-                title: "مطور تطبيقات موبايل - React Native",
-                department: "التقنية",
-                location: "الرياض",
-                type: "دوام كامل",
-                salary: "12,000 - 18,000 ريال",
-                icon: Code,
-                description: "نبحث عن مطور تطبيقات موبايل خبير لتطوير وصيانة تطبيقاتنا على iOS و Android.",
-                requirements: ["خبرة 3+ سنوات في React Native", "معرفة قوية بـ JavaScript/TypeScript", "خبرة في تطوير التطبيقات التجارية"]
-              },
-              {
-                title: "مختص تسويق رقمي",
-                department: "التسويق", 
-                location: "جدة",
-                type: "دوام كامل",
-                salary: "8,000 - 12,000 ريال",
-                icon: Megaphone,
-                description: "مطلوب مختص تسويق رقمي مبدع لإدارة حملاتنا الرقمية وزيادة قاعدة المستخدمين.",
-                requirements: ["خبرة في إدارة الحملات الرقمية", "معرفة بأدوات التحليل", "مهارات إبداعية في المحتوى"]
-              },
-              {
-                title: "مدير علاقات السائقين",
-                department: "العمليات",
-                location: "الدمام", 
-                type: "دوام كامل",
-                salary: "10,000 - 14,000 ريال",
-                icon: Users,
-                description: "مطلوب مدير لإدارة علاقات السائقين وضمان رضاهم وتطوير شبكة السائقين.",
-                requirements: ["خبرة ��ي إدارة العلاقات", "مهارات تواصل ممتازة", "خلفية في قطاع النقل مفضلة"]
-              },
-              {
-                title: "محلل بيانات",
-                department: "التقنية",
-                location: "الرياض",
-                type: "دوام كامل", 
-                salary: "11,000 - 15,000 ريال",
-                icon: TrendingUp,
-                description: "نبحث عن محلل بيانات لاستخراج رؤى قيمة من بيانات المنصة وتحسين الأداء.",
-                requirements: ["خبرة في تحليل البيانات", "معرفة بـ Python/R", "خبرة في SQL والإحصاء"]
-              },
-              {
-                title: "مصمم واجهات المستخدم (UI/UX)",
-                department: "التصميم",
-                location: "الرياض",
-                type: "دوام كامل",
-                salary: "9,000 - 13,000 ريال", 
-                icon: Zap,
-                description: "مطلوب مصمم واجهات مبدع لتحسين تجربة المستخدم في تطبيقاتنا.",
-                requirements: ["خبرة في تصميم UI/UX", "إتقان أدوات التصميم", "فهم لتجربة المستخدم"]
-              },
-              {
-                title: "مسؤول خدمة العملاء",
-                department: "خدمة العملاء",
-                location: "جدة",
-                type: "دوام كامل",
-                salary: "6,000 - 9,000 ريال",
-                icon: Heart,
-                description: "انضم لفريق خدمة العملاء لتقديم دعم متميز لمستخدمينا.",
-                requirements: ["مهارات تواصل ممتازة", "صبر وقدرة على حل المشاكل", "خبرة في خدمة العملاء"]
-              }
-            ].map((job, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <CardContent className="p-8">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-start space-x-4 mb-4">
-                        <div className="w-12 h-12 bg-brand-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                          <job.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-brand-navy mb-2">{job.title}</h3>
-                          <div className="flex flex-wrap items-center gap-4 mb-3">
-                            <Badge className="bg-blue-100 text-blue-600">{job.department}</Badge>
-                            <div className="flex items-center text-gray-600">
-                              <MapPin className="w-4 h-4 mr-1" />
-                              {job.location}
+          <Row className="g-4 justify-content-center">
+            {jobs.map((job, index) => {
+              const IconComponent = job.icon;
+              return (
+                <Col lg={10} key={index}>
+                  <Card className={`border-0 shadow mb-3 transition-all ${isDarkMode ? 'bg-brand-navy-dark' : 'bg-white'}`}>
+                    <Card.Body className="p-4 p-md-5">
+                      <Row className="align-items-center">
+                        <Col lg={9}>
+                          <div className="d-flex align-items-start gap-3 mb-3">
+                            <div className="bg-brand-orange rounded d-flex align-items-center justify-content-center flex-shrink-0" style={{width: '48px', height: '48px'}}>
+                              <IconComponent className="text-white" style={{width: '24px', height: '24px'}} />
                             </div>
-                            <div className="flex items-center text-gray-600">
-                              <Clock className="w-4 h-4 mr-1" />
-                              {job.type}
-                            </div>
-                            <div className="flex items-center text-green-600">
-                              <DollarSign className="w-4 h-4 mr-1" />
-                              {job.salary}
+                            <div className="flex-grow-1">
+                              <h3 className="h4 fw-bold mb-2 text-primary">
+                                {job.title}
+                              </h3>
+                              <div className="d-flex flex-wrap align-items-center gap-2 gap-md-3 mb-3">
+                                <Badge className={isDarkMode ? 'bg-primary' : 'bg-info'}>
+                                  {job.department}
+                                </Badge>
+                                <div className="d-flex align-items-center text-secondary">
+                                  <MapPin className="me-1" style={{width: '16px', height: '16px'}} />
+                                  {job.location}
+                                </div>
+                                <div className="d-flex align-items-center text-secondary">
+                                  <Clock className="me-1" style={{width: '16px', height: '16px'}} />
+                                  {job.type}
+                                </div>
+                                <div className={`d-flex align-items-center ${isDarkMode ? 'text-success' : 'text-success'}`}>
+                                  <DollarSign className="me-1" style={{width: '16px', height: '16px'}} />
+                                  {job.salary}
+                                </div>
+                              </div>
+                              <p className="mb-3 text-secondary">
+                                {job.description}
+                              </p>
+                              <div>
+                                <h4 className="h6 fw-semibold mb-2 text-primary">
+                                  {t.careers.positions.requirements}
+                                </h4>
+                                <ul className="small list-unstyled mb-0 text-secondary">
+                                  {job.requirements.map((req, i) => (
+                                    <li key={i} className="d-flex align-items-start mb-1">
+                                      <span className="me-2">•</span>
+                                      <span>{req}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
                             </div>
                           </div>
-                          <p className="text-gray-600 mb-4">{job.description}</p>
-                          <div className="mb-4">
-                            <h4 className="font-semibold text-brand-navy mb-2">المتطلبات:</h4>
-                            <ul className="text-sm text-gray-600 space-y-1">
-                              {job.requirements.map((req, i) => (
-                                <li key={i}>• {req}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="lg:ml-8">
-                      <Button className="bg-brand-orange hover:bg-brand-orange-dark text-white">
-                        تقدم الآن
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+                        </Col>
+                        <Col lg={3} className="text-center text-lg-start mt-3 mt-lg-0">
+                          <Button className="bg-brand-orange border-0 text-white w-100">
+                            {t.careers.positions.applyNow}
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </section>
 
       {/* Benefits */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">المزايا والمكافآت</h2>
-            <p className="text-xl text-gray-600">ما نقدمه لموظفينا</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-dark' : 'bg-light'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.careers.benefits.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.careers.benefits.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">تأمين صحي ��امل</h3>
-              <p className="text-gray-600">تغطية طبية كاملة للموظف والعائلة</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-navy rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">مكافآت سنوية</h3>
-              <p className="text-gray-600">نظام مكافآت يعتمد على الأداء والإنجازات</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Coffee className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">إجازات مرنة</h3>
-              <p className="text-gray-600">إجازات سنوية مدفوعة وساعات عمل مرنة</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">برامج تطوير</h3>
-              <p className="text-gray-600">دورات تدريبية ومؤتمرات لتطوير المهارات</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-yellow-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">أدوات متطورة</h3>
-              <p className="text-gray-600">أحدث الأجهزة والبرامج للعمل</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-red-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">فعاليات الفريق</h3>
-              <p className="text-gray-600">أنشطة ترفيهية ورحلات جماعية</p>
-            </div>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5 justify-content-center">
+            {benefits.map((benefit, index) => {
+              const IconComponent = benefit.icon;
+              return (
+                <Col sm={6} lg={4} key={index} className="text-center">
+                  <div className={`${benefit.bgColor} rounded d-flex align-items-center justify-content-center mx-auto mb-3`} style={{width: '64px', height: '64px'}}>
+                    <IconComponent className="text-white" style={{width: '32px', height: '32px'}} />
+                  </div>
+                  <h3 className="h5 fw-semibold mb-2 text-primary">
+                    {benefit.title}
+                  </h3>
+                  <p className="small text-muted">
+                    {benefit.desc}
+                  </p>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </section>
 
       {/* Application Process */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">عملية التقديم</h2>
-            <p className="text-xl text-gray-600">خطوات بسيطة للانضمام إلينا</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.careers.process.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.careers.process.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">1</span>
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">تقديم الطلب</h3>
-              <p className="text-gray-600">أرسل سيرتك الذاتية ورسالة التغطية</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">2</span>
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">مراجعة أولية</h3>
-              <p className="text-gray-600">مراجعة الطلب من قبل فريق الموارد البشرية</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">3</span>
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">المقابلة</h3>
-              <p className="text-gray-600">مقابلة مع مدير التوظيف والفريق التقني</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">4</span>
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">بداية العمل</h3>
-              <p className="text-gray-600">التحاق بالفريق وبرنامج التأهيل</p>
-            </div>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5 justify-content-center">
+            {processSteps.map((step) => (
+              <Col sm={6} lg={3} key={step.step} className="text-center">
+                <div className="bg-brand-orange rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style={{width: '64px', height: '64px'}}>
+                  <span className="text-white fs-3 fw-bold">
+                    {step.step}
+                  </span>
+                </div>
+                <h3 className="h5 fw-semibold mb-2 text-primary">
+                  {step.title}
+                </h3>
+                <p className="small text-muted">
+                  {step.desc}
+                </p>
+              </Col>
+            ))}
+          </Row>
+        </Container>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-brand-orange to-brand-orange-dark text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">جاهز لبدء رحلتك المهنية؟</h2>
-          <p className="text-xl mb-8 opacity-90">انضم لفريقنا وكن جزءاً من مستقبل المواصلات</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-brand-orange hover:bg-gray-100 text-lg px-8 py-6">
-              تصفح الوظائف المتاحة
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-orange text-lg px-8 py-6">
-              أرسل سيرتك الذاتية
-            </Button>
+      <section className="py-5 py-md-4 bg-brand-orange text-white" style={{background: 'linear-gradient(to right, #fb923d, #ea580c)'}}>
+        <Container>
+          <div className="text-center">
+            <h2 className="display-4 fw-bold mb-3">{t.careers.cta.title}</h2>
+            <p className="lead mb-4 text-white text-opacity-90">{t.careers.cta.subtitle}</p>
+            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+              <Button size="lg" className="bg-white text-brand-orange border-0 px-5 py-3">
+                {t.careers.cta.browseJobs}
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white px-5 py-3">
+                {t.careers.cta.submitCV}
+              </Button>
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-navy-dark text-white py-12">
-        <div className="container mx-auto px-4">
+      <footer className={`py-4 py-md-5 border-top transition-colors ${isDarkMode ? 'bg-brand-navy-dark border-secondary' : 'bg-white border-light'}`}>
+        <Container>
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                 alt="DELVI Logo"
-                className="h-8 w-auto"
+                style={{height: '32px', width: 'auto'}}
               />
             </div>
-            <p className="text-gray-400">&copy; 2024 DELVI. جميع الحقوق محفوظة.</p>
+            <p className="text-muted">
+              &copy; 2024 DELVI. {t.footer.copyright}
+            </p>
           </div>
-        </div>
+        </Container>
       </footer>
     </div>
   );

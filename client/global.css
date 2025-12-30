@@ -5,6 +5,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Adaptive Text Colors (Dark Mode Safe) ── */
+
+.text-primary   { @apply text-gray-900; }
+
+.text-secondary { @apply text-gray-700; }
+
+.text-muted     { @apply text-gray-500; }
+
+.text-invert    { @apply text-white; }
+
+.dark .text-primary   { @apply text-gray-100; }
+
+.dark .text-secondary { @apply text-gray-300; }
+
+.dark .text-muted     { @apply text-gray-400; }
+
+/* text-invert stays white for accents/buttons */
+
 @layer base {
   /**
    * Tailwind CSS theme
@@ -120,12 +138,7 @@
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
-  }
-
-  /* Dark mode enhancements */
-  .dark body {
-    @apply bg-brand-navy text-white;
+    @apply text-primary bg-white dark:bg-brand-navy transition-colors duration-300;
   }
 
   /* Responsive utilities */

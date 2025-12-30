@@ -1,25 +1,46 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/use-translation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import {
   ChevronDown,
   ChevronUp,
-  ArrowRight,
+  ArrowLeft,
   HelpCircle,
   Sun,
-  Moon
+  Moon,
+  MessageCircle,
+  Headphones,
 } from "lucide-react";
+import { Container, Row, Col, Card, Accordion } from "react-bootstrap";
 
 export default function FAQ() {
+  const { t, locale } = useTranslation();
   const [openItems, setOpenItems] = useState<number[]>([]);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Load dark mode from localStorage or default to false
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('delvi-theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return isDark;
+    }
+    return false;
+  });
 
-  // Dark mode toggle effect
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem('delvi-theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('delvi-theme', 'light');
     }
   }, [isDarkMode]);
 
@@ -37,165 +58,192 @@ export default function FAQ() {
 
   const faqData = [
     {
-      question: "كيف يمكنني تنزيل تطبيق DELVI؟",
-      answer: "يمكنك تنزيل تطبيق DELVI من متجر Google Play للأندرويد أو App Store للآيفون. ابحث عن 'DELVI' وقم بتنزيل التطبيق مجانا��."
+      question: t.faq.questions.q1,
+      answer: t.faq.questions.a1,
     },
     {
-      question: "كيف يعمل نظام التفاوض على الأسعار؟",
-      answer: "في DELVI، يمكن للراكب والسائق التفاوض مباشرة على سعر الرحلة. الراكب يحدد وجهته والسعر المقترح، والسائقون يمكنهم قبول السعر أو اقتراح سعر آخر."
+      question: t.faq.questions.q2,
+      answer: t.faq.questions.a2,
     },
     {
-      question: "هل التطبيق آمن للاستخدام؟",
-      answer: "نعم، DELVI يوفر بيئة آمنة للجميع. جميع السائقين موثقين ومعتمدين، ونوفر نظام تتبع مباشر للرحلات ونظام تقييمات شفاف."
+      question: t.faq.questions.q3,
+      answer: t.faq.questions.a3,
     },
     {
-      question: "ما هي طرق الدفع المتاحة؟",
-      answer: "نقبل الدفع النقدي والدفع الإلكتروني عبر البطاقات الائتمانية والمحافظ الرقمية المختلفة مثل STC Pay وApple Pay."
+      question: t.faq.questions.q4,
+      answer: t.faq.questions.a4,
     },
     {
-      question: "كيف يمكنني الانضمام كسائق؟",
-      answer: "للانضمام كسائق، قم بتنزيل التطبيق واختر 'وضع السائق'، ثم أكمل عملية التسجيل بتقديم الوثائق المطلوبة مثل رخصة القيادة ووثائق السيارة."
+      question: t.faq.questions.q5,
+      answer: t.faq.questions.a5,
     },
     {
-      question: "ما هي ساعات عمل الخدمة؟",
-      answer: "DELVI متاح على مدار الساعة طوال أيام الأسبوع. يمكنك طلب رحلة في أي وقت والعثور على سائقين متاحين."
+      question: t.faq.questions.q6,
+      answer: t.faq.questions.a6,
     },
     {
-      question: "ماذا لو لم أجد سائق متاح؟",
-      answer: "إذا لم تجد سائق متاح فوراً، يمكنك زيادة السعر المقترح أو الانتظار قليلاً. نعمل على توفير أكبر عدد من السائقين لضمان توفر الخدمة."
+      question: t.faq.questions.q7,
+      answer: t.faq.questions.a7,
     },
     {
-      question: "كيف يتم احتساب تقييمات السائقين؟",
-      answer: "تقييمات السائقين تعتمد على تقييمات الركاب بعد كل رحلة. نأخذ في الاعتبار الأمان، الالتزام بالوقت، نظافة السيارة، وحسن التعامل."
-    }
+      question: t.faq.questions.q8,
+      answer: t.faq.questions.a8,
+    },
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-brand-navy' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen transition-colors ${isDarkMode ? 'bg-brand-navy' : 'bg-light'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className={`shadow-sm border-b transition-colors duration-300 ${isDarkMode ? 'bg-brand-navy-light border-gray-700' : 'bg-white border-gray-100'}`}>
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
-                alt="DELVI Logo"
-                className="h-10 w-auto"
-              />
-            </Link>
+      <header className={`sticky-top border-bottom shadow-sm transition-colors ${isDarkMode ? 'bg-brand-navy-light border-secondary' : 'bg-white border-light'}`} style={{zIndex: 1050}}>
+        <Container fluid className="px-3 px-md-4">
+          <Row className="align-items-center">
+            <Col className="d-flex align-items-center">
+              <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
+                  alt="DELVI Logo"
+                  style={{height: '40px', width: 'auto'}}
+                />
+              </Link>
+            </Col>
             
-            {/* Dark Mode Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleDarkMode}
-              className={`transition-all duration-200 ${isDarkMode ? 'text-white hover:text-brand-orange' : 'text-gray-700 hover:text-brand-orange'}`}
-              title={isDarkMode ? 'التبديل للوضع الفاتح' : 'التبديل للوضع المظلم'}
-            >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </Button>
-            
-            <Link to="/">
-              <Button variant="outline" className="{isDarkMode ? 'text-white' : 'text-brand-navy'} border-brand-navy hover:bg-brand-navy hover:text-white">
-                <ArrowRight className="w-4 h-4 mr-2" />
-                العودة للرئيسية
+            <Col xs="auto" className="d-flex align-items-center gap-2">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleDarkMode}
+                className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}
+                title={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+                aria-label={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+              >
+                {isDarkMode ? <Sun style={{width: '16px', height: '16px'}} /> : <Moon style={{width: '16px', height: '16px'}} />}
               </Button>
-            </Link>
-          </div>
-        </div>
+              <Link to="/" className="text-decoration-none">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className={`transition-colors ${isDarkMode ? 'border-secondary text-white' : 'border-brand-navy text-brand-navy'}`}
+                >
+                  <ArrowLeft className="me-2" style={{width: '16px', height: '16px'}} />
+                  {t.common.backToHome}
+                </Button>
+              </Link>
+            </Col>
+          </Row>
+        </Container>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-brand-navy to-brand-navy-dark py-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-brand-orange rounded-full flex items-center justify-center">
-              <HelpCircle className="w-8 h-8 text-white" />
+      <section className="bg-brand-navy text-white py-5 py-md-4" style={{background: 'linear-gradient(to right, #1e3a8a, #1e293b)'}}>
+        <Container>
+          <div className="text-center">
+            <div className="d-flex justify-content-center mb-4">
+              <div className="bg-brand-orange rounded-circle d-flex align-items-center justify-content-center shadow-lg" style={{width: '64px', height: '64px'}}>
+                <HelpCircle className="text-white" style={{width: '32px', height: '32px'}} />
+              </div>
             </div>
+            <h1 className="display-4 fw-bold text-white mb-3">
+              {t.faq.hero.title}
+            </h1>
+            <p className="lead text-white text-opacity-80 mx-auto" style={{maxWidth: '600px'}}>
+              {t.faq.hero.subtitle}
+            </p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            الأسئلة الشائعة
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            هنا ستجد إجابات على أكثر الأسئلة شيوعاً ح��ل خدمات DELVI
-          </p>
-        </div>
+        </Container>
       </section>
 
       {/* FAQ Content */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="space-y-4">
-            {faqData.map((item, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
-              >
-                <button
-                  onClick={() => toggleItem(index)}
-                  className="w-full p-6 text-right hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="text-brand-orange">
-                      {openItems.includes(index) ? (
-                        <ChevronUp className="w-5 h-5" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5" />
-                      )}
-                    </div>
-                    <h3 className="text-lg font-semibold {isDarkMode ? 'text-white' : 'text-brand-navy'}">
-                      {item.question}
-                    </h3>
-                  </div>
-                </button>
-                
-                {openItems.includes(index) && (
-                  <div className="px-6 pb-6">
-                    <div className="border-t border-gray-100 pt-4">
-                      <p className="text-gray-700 leading-relaxed">
-                        {item.answer}
-                      </p>
-                    </div>
-                  </div>
-                )}
+      <section className="py-5 py-md-4">
+        <Container>
+          <Row className="justify-content-center">
+            <Col lg={10}>
+              <div className="d-flex flex-column gap-3 mb-5">
+                {faqData.map((item, index) => (
+                  <Card 
+                    key={index}
+                    className={`border transition-all overflow-hidden ${
+                      isDarkMode 
+                        ? 'bg-brand-navy-light border-secondary' 
+                        : 'bg-white border-secondary'
+                    }`}
+                  >
+                    <button
+                      onClick={() => toggleItem(index)}
+                      className={`w-100 p-4 text-start border-0 bg-transparent transition-colors ${
+                        isDarkMode 
+                          ? 'hover:bg-brand-navy-dark text-white' 
+                          : 'hover:bg-light'
+                      }`}
+                      aria-expanded={openItems.includes(index)}
+                    >
+                      <div className="d-flex align-items-center justify-content-between gap-3">
+                        <h3 className="h5 fw-semibold flex-grow-1 mb-0 text-primary">
+                          {item.question}
+                        </h3>
+                        <div className={`transition-transform flex-shrink-0 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`}>
+                          {openItems.includes(index) ? (
+                            <ChevronUp style={{width: '20px', height: '20px'}} />
+                          ) : (
+                            <ChevronDown style={{width: '20px', height: '20px'}} />
+                          )}
+                        </div>
+                      </div>
+                    </button>
+                    
+                    {openItems.includes(index) && (
+                      <div className={`px-4 pb-4 border-top ${isDarkMode ? 'border-secondary' : 'border-light'}`}>
+                        <p className="pt-3 mb-0 text-secondary">
+                          {item.answer}
+                        </p>
+                      </div>
+                    )}
+                  </Card>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Contact Section */}
-          <div className="mt-16 bg-brand-orange rounded-2xl p-8 text-center">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              لم تجد إجابة لسؤالك؟
-            </h2>
-            <p className="text-white/90 mb-6">
-              فريق دعم العملاء لدينا جاهز لمساعدتك في أي وقت
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                className="bg-white text-brand-orange hover:bg-gray-100"
-                size="lg"
-              >
-                تواصل معنا
-              </Button>
-              <Button 
-                variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-brand-orange"
-                size="lg"
-              >
-                مركز المساعدة
-              </Button>
-            </div>
-          </div>
-        </div>
+              {/* Contact Section */}
+              <Card className={`mt-5 border-0 ${isDarkMode ? 'bg-brand-orange' : 'bg-brand-orange'} overflow-hidden`}>
+                <Card.Body className="p-5 text-center text-white">
+                  <h2 className="h2 fw-bold mb-3">
+                    {t.faq.contact.title}
+                  </h2>
+                  <p className="text-white text-opacity-90 mb-4 mx-auto" style={{maxWidth: '600px'}}>
+                    {t.faq.contact.description}
+                  </p>
+                  <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <Button 
+                      className="bg-white text-brand-orange border-0"
+                      size="lg"
+                    >
+                      <MessageCircle className="me-2" style={{width: '16px', height: '16px'}} />
+                      {t.faq.contact.contactUs}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="border-white text-white"
+                      size="lg"
+                    >
+                      <Headphones className="me-2" style={{width: '16px', height: '16px'}} />
+                      {t.faq.contact.helpCenter}
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-navy-dark py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-white/70">
-            &copy; 2024 DELVI. جميع الحقوق محفوظة.
-          </p>
-        </div>
+      <footer className={`py-4 border-top transition-colors ${isDarkMode ? 'bg-brand-navy-dark border-secondary' : 'bg-white border-light'}`}>
+        <Container>
+          <div className="text-center">
+            <p className="text-muted">
+              &copy; 2024 DELVI. {t.footer.copyright}
+            </p>
+          </div>
+        </Container>
       </footer>
     </div>
   );

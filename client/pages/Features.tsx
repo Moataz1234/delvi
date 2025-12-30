@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/use-translation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { 
-  Car, 
   ArrowLeft, 
   Clock, 
   Shield, 
@@ -19,352 +20,415 @@ import {
   CheckCircle,
   Camera,
   MessageSquare,
-  Wifi
+  Wifi,
+  Sun,
+  Moon
 } from "lucide-react";
+import { Container, Row, Col, Card, ProgressBar } from "react-bootstrap";
 
 export default function Features() {
+  const { t, locale } = useTranslation();
+  // Load dark mode from localStorage or default to false
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('delvi-theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return isDark;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('delvi-theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('delvi-theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const mainFeatures = [
+    {
+      icon: Clock,
+      title: t.features.main.fastArrival.title,
+      description: t.features.main.fastArrival.desc,
+      points: [
+        t.features.main.fastArrival.point1,
+        t.features.main.fastArrival.point2,
+        t.features.main.fastArrival.point3,
+      ],
+    },
+    {
+      icon: Shield,
+      title: t.features.main.advancedSecurity.title,
+      description: t.features.main.advancedSecurity.desc,
+      points: [
+        t.features.main.advancedSecurity.point1,
+        t.features.main.advancedSecurity.point2,
+        t.features.main.advancedSecurity.point3,
+      ],
+    },
+    {
+      icon: DollarSign,
+      title: t.features.main.fairPricing.title,
+      description: t.features.main.fairPricing.desc,
+      points: [
+        t.features.main.fairPricing.point1,
+        t.features.main.fairPricing.point2,
+        t.features.main.fairPricing.point3,
+      ],
+    },
+    {
+      icon: Navigation,
+      title: t.features.main.liveTracking.title,
+      description: t.features.main.liveTracking.desc,
+      points: [
+        t.features.main.liveTracking.point1,
+        t.features.main.liveTracking.point2,
+        t.features.main.liveTracking.point3,
+      ],
+    },
+    {
+      icon: CreditCard,
+      title: t.features.main.flexiblePayment.title,
+      description: t.features.main.flexiblePayment.desc,
+      points: [
+        t.features.main.flexiblePayment.point1,
+        t.features.main.flexiblePayment.point2,
+        t.features.main.flexiblePayment.point3,
+      ],
+    },
+    {
+      icon: HeadphonesIcon,
+      title: t.features.main.support247.title,
+      description: t.features.main.support247.desc,
+      points: [
+        t.features.main.support247.point1,
+        t.features.main.support247.point2,
+        t.features.main.support247.point3,
+      ],
+    },
+  ];
+
+  const advancedFeatures = [
+    {
+      icon: Smartphone,
+      title: t.features.advanced.smartApp.title,
+      description: t.features.advanced.smartApp.desc,
+    },
+    {
+      icon: Star,
+      title: t.features.advanced.ratingSystem.title,
+      description: t.features.advanced.ratingSystem.desc,
+    },
+    {
+      icon: MessageSquare,
+      title: t.features.advanced.directCommunication.title,
+      description: t.features.advanced.directCommunication.desc,
+    },
+    {
+      icon: Camera,
+      title: t.features.advanced.visualVerification.title,
+      description: t.features.advanced.visualVerification.desc,
+    },
+  ];
+
+  const driverFeatures = [
+    {
+      icon: DollarSign,
+      title: t.features.drivers.fairIncome.title,
+      description: t.features.drivers.fairIncome.desc,
+    },
+    {
+      icon: Wifi,
+      title: t.features.drivers.advancedApp.title,
+      description: t.features.drivers.advancedApp.desc,
+    },
+    {
+      icon: Users,
+      title: t.features.drivers.supportiveCommunity.title,
+      description: t.features.drivers.supportiveCommunity.desc,
+    },
+    {
+      icon: CheckCircle,
+      title: t.features.drivers.fullFlexibility.title,
+      description: t.features.drivers.fullFlexibility.desc,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen transition-colors ${isDarkMode ? 'bg-brand-navy' : 'bg-light'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="border-b bg-white">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link to="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  العودة للرئيسية
+      <header className={`sticky-top border-bottom transition-colors ${isDarkMode ? 'bg-brand-navy-light border-secondary' : 'bg-white border-light'}`} style={{zIndex: 1050}}>
+        <Container fluid className="px-3 px-md-4">
+          <Row className="align-items-center">
+            <Col className="d-flex align-items-center gap-3">
+              <Link to="/" className="text-decoration-none">
+                <Button variant="ghost" size="sm" className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}>
+                  <ArrowLeft className="me-2" style={{width: '16px', height: '16px'}} />
+                  {t.common.backToHome}
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2">
+              <div className="d-flex align-items-center">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                   alt="DELVI Logo"
-                  className="h-10 w-auto"
+                  style={{height: '40px', width: 'auto'}}
                 />
               </div>
-            </div>
-          </div>
-        </div>
+            </Col>
+
+            <Col xs="auto" className="d-flex align-items-center gap-2">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleDarkMode}
+                className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}
+                title={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+                aria-label={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+              >
+                {isDarkMode ? <Sun style={{width: '16px', height: '16px'}} /> : <Moon style={{width: '16px', height: '16px'}} />}
+              </Button>
+            </Col>
+          </Row>
+        </Container>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-navy to-brand-navy-dark text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="bg-brand-orange text-white border-0 mb-6">
-              <Zap className="w-4 h-4 mr-2" />
-              المميزات
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              مميزات <span className="text-brand-orange">استثنائية</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-              اكتشف كل ما يجعل DELVI الخيار الأمثل للمواصلات الآمنة والمريحة
-            </p>
-          </div>
-        </div>
+      <section className="bg-brand-navy text-white py-5 py-md-4" style={{background: 'linear-gradient(to bottom right, #1e3a8a, #1e293b)'}}>
+        <Container>
+          <Row className="justify-content-center">
+            <Col lg={10} className="text-center">
+              <Badge className="bg-brand-orange text-white border-0 mb-4 px-3 py-2 d-inline-flex align-items-center">
+                <Zap className="me-2" style={{width: '16px', height: '16px'}} />
+                {t.navigation.features}
+              </Badge>
+              <h1 className="display-4 fw-bold mb-4">
+                {t.features.hero.title}
+              </h1>
+              <p className="lead text-light">
+                {t.features.hero.subtitle}
+              </p>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* Main Features */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">المميزات الرئيسية</h2>
-            <p className="text-xl text-gray-600">كل ما تحتاجه في تطبيق واحد</p>
+      <section className="py-5 py-md-4">
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.features.main.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.features.main.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 bg-brand-orange rounded-xl flex items-center justify-center mb-6">
-                  <Clock className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">وصول سريع</h3>
-                <p className="text-gray-600 mb-4">
-                  احصل على سائق خلال 3-5 دقائق في المتوسط. خوارزميات ذكية لأسرع توصيل ممكن
-                </p>
-                <ul className="text-sm text-gray-500 space-y-1">
-                  <li>• متوسط انتظار أقل من 5 دقائق</li>
-                  <li>• تحديد أقرب سائق متاح</li>
-                  <li>• خرائط ذكية لأفضل طريق</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 bg-brand-orange rounded-xl flex items-center justify-center mb-6">
-                  <Shield className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">أمان متقدم</h3>
-                <p className="text-gray-600 mb-4">
-                  نظام أمان شامل يضمن سلامتك في كل رحلة مع مراقبة مستمرة ودعم طوارئ
-                </p>
-                <ul className="text-sm text-gray-500 space-y-1">
-                  <li>• فحص شامل لجميع السائقين</li>
-                  <li>• تتبع مباشر للرحلة</li>
-                  <li>• زر طوارئ سريع</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 bg-brand-orange rounded-xl flex items-center justify-center mb-6">
-                  <DollarSign className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">أسعار عادلة</h3>
-                <p className="text-gray-600 mb-4">
-                  تسعيرة شفافة ومعقولة بدون رسوم خفية. ادفع فقط مقابل ما تستخدمه
-                </p>
-                <ul className="text-sm text-gray-500 space-y-1">
-                  <li>• تسعيرة واضحة مسبقاً</li>
-                  <li>• بدون رسوم خفية</li>
-                  <li>• خصومات وعروض منتظمة</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 bg-brand-orange rounded-xl flex items-center justify-center mb-6">
-                  <Navigation className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">تتبع مباشر</h3>
-                <p className="text-gray-600 mb-4">
-                  راقب موقع السائق ومسار الرحلة لحظياً. شارك رحلتك مع الأصدقاء والعائلة
-                </p>
-                <ul className="text-sm text-gray-500 space-y-1">
-                  <li>• خرائط تفاعلية عالية الدقة</li>
-                  <li>• مشاركة الموقع المباشر</li>
-                  <li>• تقدير دقيق لوقت الوصول</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 bg-brand-orange rounded-xl flex items-center justify-center mb-6">
-                  <CreditCard className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">دفع متنوع</h3>
-                <p className="text-gray-600 mb-4">
-                  طرق دفع متعددة وآمنة. نقداً، بطاقة ائتمان، أو محفظة إلكترونية
-                </p>
-                <ul className="text-sm text-gray-500 space-y-1">
-                  <li>• دفع نقدي أو إلكتروني</li>
-                  <li>• بطاقات ائتمان آمنة</li>
-                  <li>• محافظ إلكترونية متنوعة</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 bg-brand-orange rounded-xl flex items-center justify-center mb-6">
-                  <HeadphonesIcon className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">دعم 24/7</h3>
-                <p className="text-gray-600 mb-4">
-                  فريق دعم متخصص متاح على مدار الساعة لمساعدتك في أي وقت
-                </p>
-                <ul className="text-sm text-gray-500 space-y-1">
-                  <li>• دعم فوري عبر الدردشة</li>
-                  <li>• خط ساخن مجاني</li>
-                  <li>• مساعدة بعدة لغات</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5">
+            {mainFeatures.map((feature, index) => {
+              const IconComponent = feature.icon;
+              return (
+                <Col sm={6} lg={4} key={index}>
+                  <Card className={`h-100 border-0 shadow transition-all ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+                    <Card.Body className="p-4 p-md-5">
+                      <div className="bg-brand-orange rounded d-flex align-items-center justify-content-center mb-4" style={{width: '56px', height: '56px'}}>
+                        <IconComponent className="text-white" style={{width: '28px', height: '28px'}} />
+                      </div>
+                      <h3 className="h5 fw-bold mb-3 text-primary">
+                        {feature.title}
+                      </h3>
+                      <p className="mb-3 text-secondary">
+                        {feature.description}
+                      </p>
+                      <ul className="small list-unstyled d-flex flex-column gap-2 mb-0 text-muted">
+                        {feature.points.map((point, i) => (
+                          <li key={i} className="d-flex align-items-start">
+                            <CheckCircle className={`flex-shrink-0 me-2 mt-1 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`} style={{width: '16px', height: '16px'}} />
+                            <span>{point.replace('• ', '')}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </section>
 
       {/* Advanced Features */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">مميزات متقدمة</h2>
-            <p className="text-xl text-gray-600">تقنيات حديثة لتجربة أفضل</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.features.advanced.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.features.advanced.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-brand-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Smartphone className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-brand-navy mb-2">تطبيق ذكي</h3>
-                  <p className="text-gray-600">
-                    تطبيق حديث وسهل الاستخدام مع واجهة عربية مصممة خصيصاً للمستخدم العربي
-                  </p>
-                </div>
+          <Row className="g-4 g-lg-5 align-items-center justify-content-center">
+            <Col md={6}>
+              <div className="d-flex flex-column gap-4 gap-lg-5">
+                {advancedFeatures.map((feature, index) => {
+                  const IconComponent = feature.icon;
+                  return (
+                    <div key={index} className="d-flex align-items-start gap-3">
+                      <div className="bg-brand-orange rounded d-flex align-items-center justify-content-center flex-shrink-0" style={{width: '48px', height: '48px'}}>
+                        <IconComponent className="text-white" style={{width: '24px', height: '24px'}} />
+                      </div>
+                      <div className="flex-grow-1">
+                        <h3 className="h5 fw-semibold mb-2 text-primary">
+                          {feature.title}
+                        </h3>
+                        <p className="text-secondary">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
+            </Col>
 
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-brand-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Star className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-brand-navy mb-2">نظام تقييم</h3>
-                  <p className="text-gray-600">
-                    نظام تقييم شامل للسائقين والركاب يضمن جودة الخدمة المستمرة
-                  </p>
-                </div>
-              </div>
+            <Col md={6}>
+              <Card className="bg-brand-orange border-0 shadow-lg">
+                <Card.Body className="p-4 p-md-5 text-white">
+                  <h3 className="h3 fw-bold mb-4">{t.features.advanced.stats.title}</h3>
+                  <div className="d-flex flex-column gap-4">
+                    <div>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span>{t.features.advanced.stats.satisfaction}</span>
+                        <span className="fw-bold">98%</span>
+                      </div>
+                      <div className="progress" style={{height: '8px'}}>
+                        <div className="progress-bar bg-white" role="progressbar" style={{width: '98%'}}></div>
+                      </div>
+                    </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-brand-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MessageSquare className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-brand-navy mb-2">تواصل مباشر</h3>
-                  <p className="text-gray-600">
-                    تواصل مع السائق عبر المكالمات أو الرسائل النصية داخل التطبيق
-                  </p>
-                </div>
-              </div>
+                    <div>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span>{t.features.advanced.stats.accuracy}</span>
+                        <span className="fw-bold">95%</span>
+                      </div>
+                      <div className="progress bg-white bg-opacity-20" style={{height: '8px'}}>
+                        <div className="progress-bar bg-white" role="progressbar" style={{width: '95%'}}></div>
+                      </div>
+                    </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-brand-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Camera className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-brand-navy mb-2">تحقق بصري</h3>
-                  <p className="text-gray-600">
-                    تحقق من هوية السائق والمركبة عبر الصور قبل بدء الرحلة
-                  </p>
-                </div>
-              </div>
-            </div>
+                    <div>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span>{t.features.advanced.stats.safety}</span>
+                        <span className="fw-bold">99%</span>
+                      </div>
+                      <div className="progress bg-white bg-opacity-20" style={{height: '8px'}}>
+                        <div className="progress-bar bg-white" role="progressbar" style={{width: '99%'}}></div>
+                      </div>
+                    </div>
 
-            <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark rounded-3xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-6">إحصائيات التطبيق</h3>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span>معدل رضا المستخدمين</span>
-                    <span className="font-bold">98%</span>
+                    <div>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span>{t.features.advanced.stats.responsiveness}</span>
+                        <span className="fw-bold">92%</span>
+                      </div>
+                      <div className="progress bg-white bg-opacity-20" style={{height: '8px'}}>
+                        <div className="progress-bar bg-white" role="progressbar" style={{width: '92%'}}></div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full" style={{width: '98%'}}></div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span>دقة التو��يت</span>
-                    <span className="font-bold">95%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full" style={{width: '95%'}}></div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span>معدل الأمان</span>
-                    <span className="font-bold">99%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full" style={{width: '99%'}}></div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span>سرعة الاستجابة</span>
-                    <span className="font-bold">92%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full" style={{width: '92%'}}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* For Drivers Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">مميزات للسائقين</h2>
-            <p className="text-xl text-gray-600">نوفر أفضل تجربة للسائقين أيضاً</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-dark' : 'bg-light'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.features.drivers.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.features.drivers.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-                <DollarSign className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">دخل عادل</h3>
-              <p className="text-gray-600">نظام عمولة منصف مع إمكانية زيادة الدخل</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Wifi className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">تطبيق متطور</h3>
-              <p className="text-gray-600">تطبيق سائق بواجهة سهلة ومميزات متقدمة</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">مجتمع داعم</h3>
-              <p className="text-gray-600">شبكة دعم قوية ومجتمع سائقين متعاون</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-brand-navy mb-2">مرونة كاملة</h3>
-              <p className="text-gray-600">اعمل في الأوقات التي تناسبك</p>
-            </div>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5 justify-content-center">
+            {driverFeatures.map((feature, index) => {
+              const IconComponent = feature.icon;
+              return (
+                <Col sm={6} lg={3} key={index} className="text-center">
+                  <div className="bg-brand-orange rounded d-flex align-items-center justify-content-center mx-auto mb-3" style={{width: '64px', height: '64px'}}>
+                    <IconComponent className="text-white" style={{width: '32px', height: '32px'}} />
+                  </div>
+                  <h3 className="h5 fw-semibold mb-2 text-primary">
+                    {feature.title}
+                  </h3>
+                  <p className="small text-muted">
+                    {feature.description}
+                  </p>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-brand-orange to-brand-orange-dark text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">جرب المميزات بنفسك</h2>
-          <p className="text-xl mb-8 opacity-90">حمل التطبيق واكتشف لماذا نحن ا��خيار الأول</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/book-ride">
-              <Button size="lg" className="bg-white text-brand-orange hover:bg-gray-100 text-lg px-8 py-6">
-                احجز رحلتك الآن
-              </Button>
-            </Link>
-            <Link to="/careers">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-orange text-lg px-8 py-6">
-                انضم كسائق
-              </Button>
-            </Link>
+      <section className="py-5 py-md-4 bg-brand-orange text-white" style={{background: 'linear-gradient(to right, #fb923d, #ea580c)'}}>
+        <Container>
+          <div className="text-center">
+            <h2 className="display-4 fw-bold mb-3">{t.features.cta.title}</h2>
+            <p className="lead mb-4 text-white text-opacity-90">{t.features.cta.subtitle}</p>
+            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+              <Link to="/book-ride" className="text-decoration-none">
+                <Button size="lg" className="bg-white text-brand-orange border-0 px-5 py-3">
+                  {t.features.cta.bookRide}
+                </Button>
+              </Link>
+              <Link to="/careers" className="text-decoration-none">
+                <Button size="lg" variant="outline" className="border-white text-white px-5 py-3">
+                  {t.features.cta.joinDriver}
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-navy-dark text-white py-12">
-        <div className="container mx-auto px-4">
+      <footer className={`py-4 py-md-5 border-top transition-colors ${isDarkMode ? 'bg-brand-navy-dark border-secondary' : 'bg-white border-light'}`}>
+        <Container>
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                 alt="DELVI Logo"
-                className="h-8 w-auto"
+                style={{height: '32px', width: 'auto'}}
               />
             </div>
-            <p className="text-gray-400">&copy; 2024 DELVI. جميع الحقوق محفوظة.</p>
+            <p className="text-muted">
+              &copy; 2024 DELVI. {t.footer.copyright}
+            </p>
           </div>
-        </div>
+        </Container>
       </footer>
     </div>
   );

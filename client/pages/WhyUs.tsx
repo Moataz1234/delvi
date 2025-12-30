@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/use-translation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { 
-  Car, 
   ArrowLeft, 
   Award, 
   TrendingUp, 
@@ -14,326 +15,429 @@ import {
   Star,
   CheckCircle,
   Target,
-  Globe
+  Sun,
+  Moon
 } from "lucide-react";
+import { Container, Row, Col, Card, Table } from "react-bootstrap";
 
 export default function WhyUs() {
+  const { t, locale } = useTranslation();
+  // Load dark mode from localStorage or default to false
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('delvi-theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return isDark;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('delvi-theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('delvi-theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const reasons = [
+    {
+      icon: CheckCircle,
+      bgColor: "bg-success",
+      iconColor: "text-success",
+      title: t.whyUs.reasons.fastest.title,
+      desc: t.whyUs.reasons.fastest.desc,
+    },
+    {
+      icon: Shield,
+      bgColor: "bg-info",
+      iconColor: "text-info",
+      title: t.whyUs.reasons.security.title,
+      desc: t.whyUs.reasons.security.desc,
+    },
+    {
+      icon: Star,
+      bgColor: "bg-warning",
+      iconColor: "text-warning",
+      title: t.whyUs.reasons.quality.title,
+      desc: t.whyUs.reasons.quality.desc,
+    },
+    {
+      icon: Heart,
+      bgColor: "bg-danger",
+      iconColor: "text-danger",
+      title: t.whyUs.reasons.service.title,
+      desc: t.whyUs.reasons.service.desc,
+    },
+  ];
+
+  const testimonials = [
+    {
+      text: t.whyUs.testimonials.testimonial1,
+      name: t.whyUs.testimonials.name1,
+      location: t.whyUs.testimonials.location1,
+    },
+    {
+      text: t.whyUs.testimonials.testimonial2,
+      name: t.whyUs.testimonials.name2,
+      location: t.whyUs.testimonials.location2,
+    },
+    {
+      text: t.whyUs.testimonials.testimonial3,
+      name: t.whyUs.testimonials.name3,
+      location: t.whyUs.testimonials.location3,
+    },
+  ];
+
+  const awards = [
+    {
+      icon: Award,
+      bgColor: "bg-warning",
+      iconColor: "text-warning",
+      title: t.whyUs.awards.bestApp,
+      desc: t.whyUs.awards.bestAppDesc,
+    },
+    {
+      icon: Shield,
+      bgColor: "bg-info",
+      iconColor: "text-info",
+      title: t.whyUs.awards.safetyCert,
+      desc: t.whyUs.awards.safetyCertDesc,
+    },
+    {
+      icon: TrendingUp,
+      bgColor: "bg-success",
+      iconColor: "text-success",
+      title: t.whyUs.awards.fastestGrowth,
+      desc: t.whyUs.awards.fastestGrowthDesc,
+    },
+    {
+      icon: Users,
+      bgColor: "bg-danger",
+      iconColor: "text-danger",
+      title: t.whyUs.awards.userChoice,
+      desc: t.whyUs.awards.userChoiceDesc,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen transition-colors ${isDarkMode ? 'bg-brand-navy' : 'bg-light'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="border-b bg-white">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link to="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  العودة للرئيسية
+      <header className={`sticky-top border-bottom transition-colors ${isDarkMode ? 'bg-brand-navy-light border-secondary' : 'bg-white border-light'}`} style={{zIndex: 1050}}>
+        <Container fluid className="px-3 px-md-4">
+          <Row className="align-items-center">
+            <Col className="d-flex align-items-center gap-3">
+              <Link to="/" className="text-decoration-none">
+                <Button variant="ghost" size="sm" className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}>
+                  <ArrowLeft className="me-2" style={{width: '16px', height: '16px'}} />
+                  {t.common.backToHome}
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2">
+              <div className="d-flex align-items-center">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                   alt="DELVI Logo"
-                  className="h-10 w-auto"
+                  style={{height: '40px', width: 'auto'}}
                 />
               </div>
-            </div>
-          </div>
-        </div>
+            </Col>
+
+            <Col xs="auto" className="d-flex align-items-center gap-2">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleDarkMode}
+                className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}
+                title={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+                aria-label={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+              >
+                {isDarkMode ? <Sun style={{width: '16px', height: '16px'}} /> : <Moon style={{width: '16px', height: '16px'}} />}
+              </Button>
+            </Col>
+          </Row>
+        </Container>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-navy to-brand-navy-dark text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="bg-brand-orange text-white border-0 mb-6">
-              <Target className="w-4 h-4 mr-2" />
-              لماذا نحن
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              لماذا <span className="text-brand-orange">DELVI</span> الأفضل؟
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-              اكتشف الأسباب التي تجعل ملايين المستخدمين يثقون بنا كخيارهم الأول للمواصلات
-            </p>
-          </div>
-        </div>
+      <section className="bg-brand-navy text-white py-5 py-md-4" style={{background: 'linear-gradient(to bottom right, #1e3a8a, #1e293b)'}}>
+        <Container>
+          <Row className="justify-content-center">
+            <Col lg={10} className="text-center">
+              <Badge className="bg-brand-orange text-white border-0 mb-4 px-3 py-2 d-inline-flex align-items-center">
+                <Target className="me-2" style={{width: '16px', height: '16px'}} />
+                {t.whyUs.hero.titleHighlight}
+              </Badge>
+              <h1 className="display-4 fw-bold mb-4">
+                {t.whyUs.hero.title}
+              </h1>
+              <p className="lead text-light">
+                {t.whyUs.hero.subtitle}
+              </p>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* Main Reasons */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-brand-navy mb-8">أرقام تتحدث عن نفسها</h2>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-brand-orange mb-2">2M+</div>
-                  <div className="text-gray-600">مستخدم راضٍ</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-brand-orange mb-2">50K+</div>
-                  <div className="text-gray-600">سائق معتمد</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-brand-orange mb-2">15</div>
-                  <div className="text-gray-600">محافظة</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-brand-orange mb-2">4.8★</div>
-                  <div className="text-gray-600">تقييم التطبيق</div>
-                </div>
-              </div>
-            </div>
+      <section className="py-5 py-md-4">
+        <Container>
+          <Row className="g-4 g-lg-5 align-items-center justify-content-center">
+            <Col lg={6}>
+              <h2 className="display-5 fw-bold mb-4 text-primary">
+                {t.whyUs.reasons.title}
+              </h2>
+              <Row className="g-4">
+                <Col xs={6} className="text-center">
+                  <div className={`fs-2 fw-bold mb-2 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`}>2M+</div>
+                  <div className="text-secondary">{t.whyUs.reasons.satisfiedUsers}</div>
+                </Col>
+                <Col xs={6} className="text-center">
+                  <div className={`fs-2 fw-bold mb-2 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`}>50K+</div>
+                  <div className="text-secondary">{t.whyUs.reasons.certifiedDrivers}</div>
+                </Col>
+                <Col xs={6} className="text-center">
+                  <div className={`fs-2 fw-bold mb-2 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`}>15</div>
+                  <div className="text-secondary">{t.whyUs.reasons.provinces}</div>
+                </Col>
+                <Col xs={6} className="text-center">
+                  <div className={`fs-2 fw-bold mb-2 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`}>4.8★</div>
+                  <div className="text-secondary">{t.whyUs.reasons.appRating}</div>
+                </Col>
+              </Row>
+            </Col>
 
-            <Card className="border-0 shadow-2xl">
-              <CardContent className="p-8">
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-6 h-6 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-brand-navy">أسرع خدمة في المنطقة</h3>
-                      <p className="text-gray-600 text-sm">متوسط انتظار أقل من 5 دقائق</p>
-                    </div>
+            <Col lg={6}>
+              <Card className={`border-0 shadow-lg ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+                <Card.Body className="p-4 p-md-5">
+                  <div className="d-flex flex-column gap-4">
+                    {reasons.map((reason, index) => {
+                      const IconComponent = reason.icon;
+                      return (
+                        <div key={index} className="d-flex align-items-start gap-3">
+                          <div className={`${reason.bgColor} rounded-circle d-flex align-items-center justify-content-center flex-shrink-0`} style={{width: '48px', height: '48px'}}>
+                            <IconComponent className={`text-white`} style={{width: '24px', height: '24px'}} />
+                          </div>
+                          <div className="flex-grow-1">
+                            <h3 className="fw-semibold mb-1 text-primary">
+                              {reason.title}
+                            </h3>
+                            <p className="small mb-0 text-secondary">
+                              {reason.desc}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Shield className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-brand-navy">أمان مضمون 100%</h3>
-                      <p className="text-gray-600 text-sm">سائقين مفحوصين ومعتمدين</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <Star className="w-6 h-6 text-orange-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-brand-navy">جودة عالية</h3>
-                      <p className="text-gray-600 text-sm">98% معدل رضا العملاء</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                      <Heart className="w-6 h-6 text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-brand-navy">خدمة عملاء مميزة</h3>
-                      <p className="text-gray-600 text-sm">دعم 24/7 بعدة لغات</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* Comparison Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">مقارنة مع المنافسين</h2>
-            <p className="text-xl text-gray-600">لماذا نحن الخيار الأمثل؟</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.whyUs.comparison.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.whyUs.comparison.subtitle}
+            </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="p-4 font-semibold text-brand-navy border-b-2 border-brand-orange"></div>
-              <div className="p-4 font-semibold text-center bg-brand-orange text-white rounded-t-lg">DELVI</div>
-              <div className="p-4 font-semibold text-center bg-gray-200">المنافس أ</div>
-              <div className="p-4 font-semibold text-center bg-gray-200">المنافس ب</div>
-
-              <div className="p-4 font-medium text-brand-navy border-b">وقت الانتظار</div>
-              <div className="p-4 text-center bg-green-50 border-b">
-                <span className="text-green-600 font-bold">3-5 دقائق</span>
-              </div>
-              <div className="p-4 text-center border-b">8-12 دقيقة</div>
-              <div className="p-4 text-center border-b">10-15 دقيقة</div>
-
-              <div className="p-4 font-medium text-brand-navy border-b">الأسعار</div>
-              <div className="p-4 text-center bg-green-50 border-b">
-                <span className="text-green-600 font-bold">الأقل</span>
-              </div>
-              <div className="p-4 text-center border-b">أعلى بـ 20%</div>
-              <div className="p-4 text-center border-b">أعلى بـ 35%</div>
-
-              <div className="p-4 font-medium text-brand-navy border-b">خدمة العملاء</div>
-              <div className="p-4 text-center bg-green-50 border-b">
-                <span className="text-green-600 font-bold">24/7</span>
-              </div>
-              <div className="p-4 text-center border-b">ساعات محدودة</div>
-              <div className="p-4 text-center border-b">ساعات محدودة</div>
-
-              <div className="p-4 font-medium text-brand-navy border-b">التقييم</div>
-              <div className="p-4 text-center bg-green-50 border-b">
-                <span className="text-green-600 font-bold">4.8★</span>
-              </div>
-              <div className="p-4 text-center border-b">4.2★</div>
-              <div className="p-4 text-center border-b">3.9★</div>
-
-              <div className="p-4 font-medium text-brand-navy">التغطية</div>
-              <div className="p-4 text-center bg-green-50">
-                <span className="text-green-600 font-bold">15 محافظة</span>
-              </div>
-              <div className="p-4 text-center">8 محافظات</div>
-              <div className="p-4 text-center">5 محافظات</div>
-            </div>
-          </div>
-        </div>
+          <Row className="justify-content-center">
+            <Col lg={10}>
+              <Card className={`border ${isDarkMode ? 'bg-brand-navy-light border-secondary' : 'bg-white border-secondary'}`}>
+                <Table className="mb-0">
+                  <thead>
+                    <tr>
+                      <th className={`border-bottom-2 ${isDarkMode ? 'text-white border-brand-orange' : 'text-brand-navy border-brand-orange'}`}></th>
+                      <th className={`text-center border-bottom-2 bg-brand-orange text-white border-brand-orange`}>DELVI</th>
+                      <th className={`text-center border-bottom-2 ${isDarkMode ? 'bg-secondary text-white border-secondary' : 'bg-light text-dark border-secondary'}`}>
+                        {t.whyUs.comparison.competitorA}
+                      </th>
+                      <th className={`text-center border-bottom-2 ${isDarkMode ? 'bg-secondary text-white border-secondary' : 'bg-light text-dark border-secondary'}`}>
+                        {t.whyUs.comparison.competitorB}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="text-primary">{t.whyUs.comparison.waitTime}</td>
+                      <td className={`text-center ${isDarkMode ? 'bg-success bg-opacity-25 text-success' : 'bg-success bg-opacity-10 text-success'}`}>
+                        <span className="fw-bold">{t.whyUs.comparison.waitTimeValue}</span>
+                      </td>
+                      <td className="text-secondary">{t.whyUs.comparison.waitTimeCompA}</td>
+                      <td className="text-secondary">{t.whyUs.comparison.waitTimeCompB}</td>
+                    </tr>
+                    <tr>
+                      <td className="text-primary">{t.whyUs.comparison.prices}</td>
+                      <td className={`text-center ${isDarkMode ? 'bg-success bg-opacity-25 text-success' : 'bg-success bg-opacity-10 text-success'}`}>
+                        <span className="fw-bold">{t.whyUs.comparison.lowest}</span>
+                      </td>
+                      <td className="text-secondary">{t.whyUs.comparison.priceHigher20}</td>
+                      <td className="text-secondary">{t.whyUs.comparison.priceHigher35}</td>
+                    </tr>
+                    <tr>
+                      <td className="text-primary">{t.whyUs.comparison.customerService}</td>
+                      <td className={`text-center ${isDarkMode ? 'bg-success bg-opacity-25 text-success' : 'bg-success bg-opacity-10 text-success'}`}>
+                        <span className="fw-bold">24/7</span>
+                      </td>
+                      <td className="text-secondary">{t.whyUs.comparison.limitedHours}</td>
+                      <td className="text-secondary">{t.whyUs.comparison.limitedHours}</td>
+                    </tr>
+                    <tr>
+                      <td className="text-primary">{t.whyUs.comparison.rating}</td>
+                      <td className={`text-center ${isDarkMode ? 'bg-success bg-opacity-25 text-success' : 'bg-success bg-opacity-10 text-success'}`}>
+                        <span className="fw-bold">4.8★</span>
+                      </td>
+                      <td className="text-secondary">4.2★</td>
+                      <td className="text-secondary">3.9★</td>
+                    </tr>
+                    <tr>
+                      <td className="text-primary">{t.whyUs.comparison.coverage}</td>
+                      <td className={`text-center ${isDarkMode ? 'bg-success bg-opacity-25 text-success' : 'bg-success bg-opacity-10 text-success'}`}>
+                        <span className="fw-bold">{t.whyUs.comparison.provinces15}</span>
+                      </td>
+                      <td className="text-secondary">{t.whyUs.comparison.provinces8}</td>
+                      <td className="text-secondary">{t.whyUs.comparison.provinces5}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">ماذا يقول عملاؤنا</h2>
-            <p className="text-xl text-gray-600">آراء حقيقية من مستخدمينا</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-dark' : 'bg-light'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.whyUs.testimonials.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.whyUs.testimonials.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-gray-600">5.0</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "خدمة ممتازة وسائقين محترمين. التطبيق سهل الاستخدام والأسعار معقولة جداً."
-                </p>
-                <div className="font-semibold text-brand-navy">أحمد محمد</div>
-                <div className="text-sm text-gray-500">الرياض</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-gray-600">5.0</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "أسرع تطبيق مواصلات جربته. السائق وصل خلال 3 دقائق فقط!"
-                </p>
-                <div className="font-semibold text-brand-navy">فاطمة أحمد</div>
-                <div className="text-sm text-gray-500">جدة</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-gray-600">5.0</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "أشعر بالأمان التام مع تتبع الرحلة المباشر. خدمة عملاء رائعة."
-                </p>
-                <div className="font-semibold text-brand-navy">خالد العلي</div>
-                <div className="text-sm text-gray-500">الدمام</div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5 justify-content-center">
+            {testimonials.map((testimonial, index) => (
+              <Col sm={6} lg={4} key={index}>
+                <Card className={`border-0 shadow transition-all h-100 ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+                  <Card.Body className="p-4 p-md-5">
+                    <div className="d-flex align-items-center mb-3">
+                      <div className="d-flex text-warning">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="me-1" style={{width: '20px', height: '20px', fill: 'currentColor'}} />
+                        ))}
+                      </div>
+                      <span className="ms-2 text-muted">5.0</span>
+                    </div>
+                    <p className="mb-3 text-secondary">
+                      "{testimonial.text}"
+                    </p>
+                    <div className="fw-semibold text-primary">
+                      {testimonial.name}
+                    </div>
+                    <div className="small text-muted">
+                      {testimonial.location}
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
       </section>
 
       {/* Awards Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-brand-navy mb-4">الجوائز والتقديرات</h2>
-            <p className="text-xl text-gray-600">اعتراف بالتميز والجودة</p>
+      <section className={`py-5 py-md-4 transition-colors ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3 text-primary">
+              {t.whyUs.awards.title}
+            </h2>
+            <p className="lead text-secondary">
+              {t.whyUs.awards.subtitle}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-yellow-600" />
-              </div>
-              <h3 className="font-semibold text-brand-navy mb-2">أفضل تطبيق نقل 2023</h3>
-              <p className="text-gray-600 text-sm">جائزة التميز التقني</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-brand-navy mb-2">شهادة الأمان المعتمدة</h3>
-              <p className="text-gray-600 text-sm">معهد الأمان العربي</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-brand-navy mb-2">الأسرع نمواً</h3>
-              <p className="text-gray-600 text-sm">تقرير السوق 2023</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-brand-navy mb-2">اختيار المستخدمين</h3>
-              <p className="text-gray-600 text-sm">جوائز التقنية العربية</p>
-            </div>
-          </div>
-        </div>
+          <Row className="g-4 g-lg-5 justify-content-center">
+            {awards.map((award, index) => {
+              const IconComponent = award.icon;
+              return (
+                <Col sm={6} lg={3} key={index} className="text-center">
+                  <div className={`${award.bgColor} rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3`} style={{width: '64px', height: '64px'}}>
+                    <IconComponent className="text-white" style={{width: '32px', height: '32px'}} />
+                  </div>
+                  <h3 className={`fw-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-brand-navy'}`}>
+                    {award.title}
+                  </h3>
+                  <p className="small text-muted">
+                    {award.desc}
+                  </p>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-brand-orange to-brand-orange-dark text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">مقتنع؟ ابدأ رحلتك معنا</h2>
-          <p className="text-xl mb-8 opacity-90">انضم لملا��ين المستخدمين الراضين</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/book-ride">
-              <Button size="lg" className="bg-white text-brand-orange hover:bg-gray-100 text-lg px-8 py-6">
-                احجز رحلتك الأولى
-              </Button>
-            </Link>
-            <Link to="/features">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-orange text-lg px-8 py-6">
-                اعرف المزيد
-              </Button>
-            </Link>
+      <section className="py-5 py-md-4 bg-brand-orange text-white" style={{background: 'linear-gradient(to right, #fb923d, #ea580c)'}}>
+        <Container>
+          <div className="text-center">
+            <h2 className="display-4 fw-bold mb-3">{t.whyUs.cta.title}</h2>
+            <p className="lead mb-4 text-white text-opacity-90">{t.whyUs.cta.subtitle}</p>
+            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+              <Link to="/book-ride" className="text-decoration-none">
+                <Button size="lg" className="bg-white text-brand-orange border-0 px-5 py-3">
+                  {t.whyUs.cta.bookFirst}
+                </Button>
+              </Link>
+              <Link to="/features" className="text-decoration-none">
+                <Button size="lg" variant="outline" className="border-white text-white px-5 py-3">
+                  {t.whyUs.cta.learnMore}
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-navy-dark text-white py-12">
-        <div className="container mx-auto px-4">
+      <footer className={`py-4 py-md-5 border-top transition-colors ${isDarkMode ? 'bg-brand-navy-dark border-secondary' : 'bg-white border-light'}`}>
+        <Container>
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                 alt="DELVI Logo"
-                className="h-8 w-auto"
+                style={{height: '32px', width: 'auto'}}
               />
             </div>
-            <p className="text-gray-400">&copy; 2024 DELVI. جميع الحقوق مح��وظة.</p>
+            <p className="text-muted">
+              &copy; 2024 DELVI. {t.footer.copyright}
+            </p>
           </div>
-        </div>
+        </Container>
       </footer>
     </div>
   );

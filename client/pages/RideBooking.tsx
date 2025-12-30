@@ -1,17 +1,36 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Clock, Sun, Moon, Home } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Clock, Sun, Moon, Home, ArrowLeft, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "@/hooks/use-translation";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Container, Row, Col, Card } from "react-bootstrap";
 
 export default function RideBooking() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { t, locale } = useTranslation();
+  // Load dark mode from localStorage or default to false
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('delvi-theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return isDark;
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('delvi-theme', 'dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('delvi-theme', 'light');
     }
   }, [isDarkMode]);
 
@@ -19,97 +38,119 @@ export default function RideBooking() {
     setIsDarkMode(!isDarkMode);
   };
 
+  const features = [
+    t.rideBooking.feature1,
+    t.rideBooking.feature2,
+    t.rideBooking.feature3,
+    t.rideBooking.feature4,
+    t.rideBooking.feature5,
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900" dir="rtl">
+    <div className={`min-h-screen transition-colors ${isDarkMode ? 'bg-brand-navy' : 'bg-light'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="border-b bg-white dark:bg-gray-800 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link to="/">
+      <header className={`sticky-top border-bottom transition-colors ${isDarkMode ? 'bg-brand-navy-light border-secondary' : 'bg-white border-light'}`} style={{zIndex: 1050}}>
+        <Container fluid className="px-3 px-md-4">
+          <Row className="align-items-center">
+            <Col className="d-flex align-items-center gap-3">
+              <Link to="/" className="text-decoration-none">
                 <Button
-                  variant="outline"
-                  className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white dark:text-gray-200 dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-brand-navy"
+                  variant="ghost"
+                  size="sm"
+                  className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}
                 >
-                  <Home className="w-4 h-4 mr-2" />
-                  العودة للرئيسية
+                  <ArrowLeft className="me-2" style={{width: '16px', height: '16px'}} />
+                  {t.common.backToHome}
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2">
+              <div className="d-flex align-items-center">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F065bbe9c7401418fa7bf6a66e5cffd7b%2F5d8ec53853f245179e011dc680ed3743?format=webp&width=800"
                   alt="DELVI Logo"
-                  className="h-10 w-auto"
+                  style={{height: '40px', width: 'auto'}}
                 />
               </div>
-            </div>
+            </Col>
 
-            {/* Dark Mode Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleDarkMode}
-              className="text-gray-700 hover:text-brand-orange dark:text-gray-200 dark:hover:text-brand-orange"
-              aria-label={isDarkMode ? "التبديل للوضع الفاتح" : "التبديل للوضع المظلم"}
-            >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </Button>
-          </div>
-        </div>
+            <Col xs="auto" className="d-flex align-items-center gap-2">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleDarkMode}
+                className={`transition-colors ${isDarkMode ? 'text-white' : 'text-dark'}`}
+                title={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+                aria-label={isDarkMode ? t.common.switchToLight : t.common.switchToDark}
+              >
+                {isDarkMode ? <Sun style={{width: '16px', height: '16px'}} /> : <Moon style={{width: '16px', height: '16px'}} />}
+              </Button>
+            </Col>
+          </Row>
+        </Container>
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-2xl mx-auto text-center">
-          <Card className="border-0 shadow-lg dark:bg-gray-800">
-            <CardContent className="p-12">
-              <div className="w-20 h-20 bg-brand-orange rounded-full flex items-center justify-center mx-auto mb-6">
-                <MapPin className="w-10 h-10 text-white" />
-              </div>
-
-              <h1 className="text-3xl font-bold text-brand-navy dark:text-gray-200 mb-4">
-                صفحة حجز الرحلات
-              </h1>
-
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-                هذه الصفحة قيد التطوير. سيتم إضافة نظام حجز الرحلات والبحث عن السائقين قريباً.
-              </p>
-
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
-                <div className="flex items-center justify-center space-x-4 text-gray-500 dark:text-gray-300">
-                  <Clock className="w-5 h-5" />
-                  <span>ميزات قادمة:</span>
+      <Container className="py-5 py-md-4">
+        <Row className="justify-content-center">
+          <Col lg={8}>
+            <Card className={`border-0 shadow-lg transition-all ${isDarkMode ? 'bg-brand-navy-light' : 'bg-white'}`}>
+              <Card.Header className="text-center border-0 pb-4">
+                <div className="bg-brand-orange rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style={{width: '80px', height: '80px'}}>
+                  <MapPin className="text-white" style={{width: '40px', height: '40px'}} />
                 </div>
-                <ul className="mt-4 space-y-2 text-gray-600 dark:text-gray-300">
-                  <li>• البحث عن السائقين المتاحين</li>
-                  <li>• تقدير التكلفة والوقت</li>
-                  <li>• اختيار نوع المركبة</li>
-                  <li>• تتبع الرحلة في الوقت الفعلي</li>
-                  <li>• دفع آمن ومتعدد الطرق</li>
-                </ul>
-              </div>
+                <h1 className="h2 fw-bold mb-3 text-primary">
+                  {t.rideBooking.title}
+                </h1>
+              </Card.Header>
+              <Card.Body className="d-flex flex-column gap-4">
+                <p className="lead text-center text-secondary">
+                  {t.rideBooking.subtitle}
+                </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/">
-                  <Button className="bg-brand-orange hover:bg-brand-orange-dark">
-                    العودة للرئيسية
+                <div className={`rounded p-4 ${isDarkMode ? 'bg-brand-navy-dark border border-secondary' : 'bg-light border border-secondary'}`}>
+                  <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
+                    <Clock className={`${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`} style={{width: '20px', height: '20px'}} />
+                    <span className="fw-semibold text-primary">
+                      {t.rideBooking.comingFeatures}
+                    </span>
+                  </div>
+                  <ul className="list-unstyled d-flex flex-column gap-3 mb-0">
+                    {features.map((feature, index) => (
+                      <li key={index} className="d-flex align-items-start gap-2">
+                        <CheckCircle className={`flex-shrink-0 mt-1 ${isDarkMode ? 'text-brand-orange' : 'text-brand-orange-dark'}`} style={{width: '20px', height: '20px'}} />
+                        <span className="text-secondary">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center pt-3">
+                  <Link to="/" className="text-decoration-none flex-fill flex-sm-grow-0">
+                    <Button 
+                      size="lg" 
+                      className="w-100 bg-brand-orange border-0 text-white"
+                    >
+                      <Home className="me-2" style={{width: '16px', height: '16px'}} />
+                      {t.common.backToHome}
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className={`transition-colors ${isDarkMode ? 'border-secondary text-white' : 'border-brand-navy text-brand-navy'}`}
+                  >
+                    {t.rideBooking.subscribe}
                   </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white dark:border-gray-200 dark:text-gray-200 dark:hover:bg-gray-200 dark:hover:text-brand-navy"
-                >
-                  اشترك في التحديثات
-                </Button>
-              </div>
+                </div>
 
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
-                يمكنك متابعة تطوير هذه الميزة من خلال المحادثة مع المساعد
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+                <p className="small text-center pt-3 mb-0 text-muted">
+                  {t.rideBooking.followDev}
+                </p>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
